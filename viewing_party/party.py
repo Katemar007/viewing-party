@@ -1,7 +1,15 @@
 # ------------- WAVE 1 --------------------
 
 def create_movie(title, genre, rating):
-    pass
+    movie = {}
+    if not title or not genre or not rating:
+        return None
+    else:
+        movie["title"] = title
+        movie["genre"] = genre
+        movie["rating"] = rating
+    return movie
+
 
 # -----------------------------------------
 # ------------- WAVE 2 --------------------
