@@ -31,6 +31,21 @@ def watch_movie(user_data, movie):
 # -----------------------------------------
 # ------------- WAVE 2 --------------------
 # -----------------------------------------
+def get_watched_avg_rating(user_data):
+    pass
+	
+def get_most_watched_genre(user_data):
+	
+    from collections import Counter
+
+    if not user_data["watched"]:
+        return None
+
+    genres = (g["genre"] for g in user_data["watched"])
+    number_genres = Counter(genres)
+    max_genre = max(number_genres, key=number_genres.get)
+    
+    return max_genre
 
 
 # -----------------------------------------
