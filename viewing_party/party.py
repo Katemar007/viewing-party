@@ -58,20 +58,50 @@ def get_unique_watched(user_data):
     set_user_mov_titles = set()
     set_mov_friends_titles = set()
 
+    # create set of friends movies titles
     for fr_watched in user_data["friends"]:
         for mov in fr_watched["watched"]:
             set_mov_friends_titles.add(mov["title"])
-    
+        
+    # create set of user movies titles
     for movie in user_data["watched"]:
         set_user_mov_titles.add(movie["title"])
 
+    # compare sets to determine only those that only user have seen
     unique_titles = set_user_mov_titles.difference(set_mov_friends_titles)
-
+    
+    # add those unique movies to a list of movies based on title
     for movie in user_data["watched"]:
         if movie["title"] in unique_titles:
             unique_watched.append(movie)
 
     return unique_watched
+
+def get_friends_unique_watched(user_data):
+    unique_watched = []
+    set_user_mov_titles = set()
+    set_mov_friends_titles = set()
+
+    # create set of friends movies titles
+    for fr_watched in user_data["friends"]:
+        for mov in fr_watched["watched"]:
+            set_mov_friends_titles.add(mov["title"])
+
+    # create set of user movies titles
+    for movie in user_data["watched"]:
+        set_user_mov_titles.add(movie["title"])
+
+    # compare sets to determine only those that user have never seen
+    unique_titles = set_mov_friends_titles.difference(set_user_mov_titles)
+
+    # add those movies to the list based on titles
+    for fr_watched in user_data["friends"]:
+        for mov in fr_watched["watched"]:
+            if mov["title"] in unique_titles and mov not in unique_watched:
+                unique_watched.append(mov)
+            
+    return unique_watched
+
 
 
 
