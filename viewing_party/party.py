@@ -15,7 +15,6 @@ def add_to_watched(user_data, movie):
     return user_data
 
 def add_to_watchlist(user_data, movie):
-
     user_data["watchlist"].append(movie)
     return user_data   
 
@@ -28,12 +27,19 @@ def watch_movie(user_data, movie):
             del user_data["watchlist"][i]
     return user_data    
 
-# -----------------------------------------
 # ------------- WAVE 2 --------------------
-# -----------------------------------------
 def get_watched_avg_rating(user_data):
-    pass
-	
+    if not user_data["watched"]:
+        return 0.0
+    count = 0
+    sum_ratings = 0
+    for movie in user_data["watched"]:
+        sum_ratings += movie["rating"]
+        count += 1
+    avg_rating = sum_ratings/count
+
+    return avg_rating
+
 def get_most_watched_genre(user_data):
 	
     from collections import Counter
