@@ -116,9 +116,9 @@ def get_friends_unique_watched(user_data):
 # -----------------------------------------
 
 def get_available_recs(user_data):
-
     friends_watched = get_friends_unique_watched(user_data)
     recommended_movies = []
+
     for movie in friends_watched:
         if movie["host"] in user_data["subscriptions"]:
             recommended_movies.append(movie)
@@ -146,7 +146,7 @@ def get_new_rec_by_genre(user_data):
     # determine which genre is the most watched
     # using genres_count dictionary
     most_watched_genre = None
-    times = 1
+    times = 0
     for genre, count in genres_count.items():
         if count > times:
             most_watched_genre = genre
