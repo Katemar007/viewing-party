@@ -48,6 +48,7 @@ def get_watched_avg_rating(user_data):
     for movie in user_data["watched"]:
         sum_ratings += movie["rating"]
         count += 1
+
     avg_rating = sum_ratings/count
 
     return avg_rating
@@ -65,7 +66,8 @@ def get_most_watched_genre(user_data):
     
     most_watched_genre = None
     times = 0
-
+    # iterate through genres_count dict
+    # find genre with highest count
     for genre, count in genres_count.items():
         if count > times:
             most_watched_genre = genre
@@ -133,10 +135,12 @@ def get_friends_unique_watched(user_data):
 def get_available_recs(user_data):
     friends_watched = get_friends_unique_watched(user_data)
     recommended_movies = []
-
+    
+    # add to recommended_movies only those with available subscription
     for movie in friends_watched:
         if movie["host"] in user_data["subscriptions"]:
             recommended_movies.append(movie)
+
     return recommended_movies
 
 # -----------------------------------------
@@ -144,7 +148,6 @@ def get_available_recs(user_data):
 # -----------------------------------------
 
 def get_new_rec_by_genre(user_data):
-    # first get all recommended movies
     recommended_movies = get_friends_unique_watched(user_data)
     recommended_by_genre = []
     most_watched_genre = get_most_watched_genre(user_data)
@@ -160,6 +163,7 @@ def get_rec_from_favorites(user_data):
     recommended_movies = get_unique_watched(user_data)
     recommended_fav = []
 
+    # make a list of recommendations based on favorites
     for movie in recommended_movies:
         if movie in user_data["favorites"]:
             recommended_fav.append(movie)
