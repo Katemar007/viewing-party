@@ -4,20 +4,24 @@
 
 def create_movie(title, genre, rating):
     movie = {}
+
     if not title or not genre or not rating:
         return None
     else:
         movie["title"] = title
         movie["genre"] = genre
         movie["rating"] = rating
+
     return movie
 
 def add_to_watched(user_data, movie):
     user_data["watched"].append(movie)
+
     return user_data
 
 def add_to_watchlist(user_data, movie):
     user_data["watchlist"].append(movie)
+
     return user_data   
 
 def watch_movie(user_data, movie):
@@ -27,6 +31,7 @@ def watch_movie(user_data, movie):
         if movie == user_data["watchlist"][i]["title"]: 
             user_data["watched"].append(user_data["watchlist"][i])
             del user_data["watchlist"][i]
+
     return user_data    
 
 # -----------------------------------------
@@ -36,8 +41,10 @@ def watch_movie(user_data, movie):
 def get_watched_avg_rating(user_data):
     if not user_data["watched"]:
         return 0.0
+    
     count = 0
     sum_ratings = 0
+
     for movie in user_data["watched"]:
         sum_ratings += movie["rating"]
         count += 1
@@ -46,17 +53,25 @@ def get_watched_avg_rating(user_data):
     return avg_rating
 
 def get_most_watched_genre(user_data):
-	
-    from collections import Counter
-
+    genres_count = {}
+    
+    # make a dictionary where genre is key and 
+    # how many times genre watched is value
     if not user_data["watched"]:
         return None
-
-    genres = (g["genre"] for g in user_data["watched"])
-    number_genres = Counter(genres)
-    max_genre = max(number_genres, key=number_genres.get)
+    else:
+        for movie in user_data["watched"]:
+            genres_count[movie["genre"]] = genres_count.get(movie["genre"], 0) + 1
     
-    return max_genre
+    most_watched_genre = None
+    times = 0
+
+    for genre, count in genres_count.items():
+        if count > times:
+            most_watched_genre = genre
+            times = count
+    
+    return most_watched_genre
 
 # -----------------------------------------
 # ------------- WAVE 3 --------------------
@@ -131,27 +146,9 @@ def get_available_recs(user_data):
 def get_new_rec_by_genre(user_data):
     # first get all recommended movies
     recommended_movies = get_friends_unique_watched(user_data)
-    
     recommended_by_genre = []
-    genres_count = {}
-    
-    # make a dictionary where genre is key and 
-    # how many times genre watched is value
-    if not user_data["watched"]:
-        return []
-    else:
-        for movie in user_data["watched"]:
-            genres_count[movie["genre"]] = genres_count.get(movie["genre"], 0) + 1
-    
-    # determine which genre is the most watched
-    # using genres_count dictionary
-    most_watched_genre = None
-    times = 0
-    for genre, count in genres_count.items():
-        if count > times:
-            most_watched_genre = genre
-            times = count
-    
+    most_watched_genre = get_most_watched_genre(user_data)
+
     # make a list of recommendations by genre
     for movie in recommended_movies:
         if movie["genre"] == most_watched_genre:
